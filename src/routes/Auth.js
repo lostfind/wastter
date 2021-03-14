@@ -35,6 +35,7 @@ const Auth = () => {
     }
   };
 
+  const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClick = async (event) => {
     const {
       target: { name },
@@ -74,6 +75,9 @@ const Auth = () => {
           value={newAccount ? "Create Account" : "Sign In"}
         />
       </form>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign In" : "Create Account"}
+      </span>
       <div>{error}</div>
       <div>
         <button onClick={onSocialClick} name="google">
