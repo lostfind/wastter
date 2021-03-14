@@ -1,8 +1,22 @@
 import { dbService } from "fbase";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const [waste, setWaste] = useState("");
+  const [wastes, setWastes] = useState([]);
+  const getWastes = async () => {
+    const dbWastes = await dbService.collection("wastes").get();
+    dbWastes.forEach((document) => {
+      const wasteObject = {
+        ...document.data(),
+        id: document.id,
+      };
+      setWastes((prev) => [wasteObject, ...prev]);
+    });
+  };
+  useEffect(() => {
+    getWastes();
+  }, []);
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("wastes").add({
@@ -12,22 +26,28 @@ const Home = () => {
     setWaste("");
   };
   const onChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setWaste(value);
+    setWaste(event.target.value);
   };
   return (
-    <form onSubmit={onSubmit}>
-      <input
-        value={waste}
-        onChange={onChange}
-        type="text"
-        placeholder="Input your waste"
-        maxlength={120}
-      />
-      <input type="submit" value="Wastteed" />
-    </form>
+    <div>
+      <form onSubmit={onSubmit}>
+        <input
+          value={waste}
+          onChange={onChange}
+          type="text"
+          placeholder="Input your waste"
+          maxLength={120}
+        />
+        <input type="submit" value="Wastteed" />
+      </form>
+      <div>
+        {wastes.map((waste) => (
+          <div key={waste.id}>
+            <h4>{waste.waste}</h4>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 export default Home;
