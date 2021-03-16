@@ -1,27 +1,24 @@
 import { dbService } from "fbase";
 import React, { useEffect, useState } from "react";
 
-const Home = () => {
+const Home = ({ userObj }) => {
   const [waste, setWaste] = useState("");
   const [wastes, setWastes] = useState([]);
-  const getWastes = async () => {
-    const dbWastes = await dbService.collection("wastes").get();
-    dbWastes.forEach((document) => {
-      const wasteObject = {
-        ...document.data(),
-        id: document.id,
-      };
-      setWastes((prev) => [wasteObject, ...prev]);
-    });
-  };
   useEffect(() => {
-    getWastes();
+    dbService.collection("wastes").onSnapshot((snapshot) => {
+      const wasteArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setWastes(wasteArray);
+    });
   }, []);
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("wastes").add({
-      waste,
-      createAt: Date.now(),
+      text: waste,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
     });
     setWaste("");
   };
@@ -43,7 +40,7 @@ const Home = () => {
       <div>
         {wastes.map((waste) => (
           <div key={waste.id}>
-            <h4>{waste.waste}</h4>
+            <h4>{waste.text}</h4>
           </div>
         ))}
       </div>
