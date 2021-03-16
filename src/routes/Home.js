@@ -1,3 +1,4 @@
+import Wastes from "components/Wastes";
 import { dbService } from "fbase";
 import React, { useEffect, useState } from "react";
 
@@ -39,9 +40,11 @@ const Home = ({ userObj }) => {
       </form>
       <div>
         {wastes.map((waste) => (
-          <div key={waste.id}>
-            <h4>{waste.text}</h4>
-          </div>
+          <Wastes
+            key={waste.id}
+            wastesObj={waste}
+            isOwner={waste.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
