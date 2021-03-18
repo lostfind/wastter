@@ -1,4 +1,4 @@
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import { useState } from "react";
 
 const Wastes = ({ wastesObj, isOwner }) => {
@@ -8,6 +8,7 @@ const Wastes = ({ wastesObj, isOwner }) => {
     const ok = window.confirm("Are you sure want to delete?");
     if (ok) {
       await dbService.doc(`wastes/${wastesObj.id}`).delete();
+      await storageService.refFromURL(wastesObj.attachmentUrl).delete();
     }
   };
 
@@ -41,6 +42,14 @@ const Wastes = ({ wastesObj, isOwner }) => {
       ) : (
         <>
           <h4>{wastesObj.text}</h4>
+          {wastesObj.attachmentUrl && (
+            <img
+              src={wastesObj.attachmentUrl}
+              width="50px"
+              height="50px"
+              alt=""
+            />
+          )}
           {isOwner && (
             <>
               <button onClick={onDeleteClick}>Delete wastes</button>
