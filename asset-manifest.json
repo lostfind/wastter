@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/wastter/static/css/main.f6821ae6.chunk.css",
+    "main.js": "/wastter/static/js/main.87785aa6.chunk.js",
+    "main.js.map": "/wastter/static/js/main.87785aa6.chunk.js.map",
+    "runtime-main.js": "/wastter/static/js/runtime-main.a71e90ca.js",
+    "runtime-main.js.map": "/wastter/static/js/runtime-main.a71e90ca.js.map",
+    "static/js/2.d2b821d6.chunk.js": "/wastter/static/js/2.d2b821d6.chunk.js",
+    "static/js/2.d2b821d6.chunk.js.map": "/wastter/static/js/2.d2b821d6.chunk.js.map",
+    "index.html": "/wastter/index.html",
+    "static/css/main.f6821ae6.chunk.css.map": "/wastter/static/css/main.f6821ae6.chunk.css.map",
+    "static/js/2.d2b821d6.chunk.js.LICENSE.txt": "/wastter/static/js/2.d2b821d6.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a71e90ca.js",
+    "static/js/2.d2b821d6.chunk.js",
+    "static/css/main.f6821ae6.chunk.css",
+    "static/js/main.87785aa6.chunk.js"
+  ]
+}
