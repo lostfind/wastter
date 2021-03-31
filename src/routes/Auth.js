@@ -1,6 +1,5 @@
 import AuthForm from "components/AuthForm";
 import { authService, firebaseInstance } from "fbase";
-import React, { useState } from "react";
 
 const Auth = () => {
   const onSocialClick = async (event) => {

@@ -10,6 +10,7 @@ function App() {
     setUserObj({
       displayName: user.displayName,
       uid: user.uid,
+      emailVerified: user.emailVerified,
       updateProfile: (args) => user.updateProfile(args),
     });
   };
@@ -20,6 +21,7 @@ function App() {
         setUserObj({
           displayName: user.displayName,
           uid: user.uid,
+          emailVerified: user.emailVerified,
           updateProfile: (args) => user.updateProfile(args),
         });
       } else {
