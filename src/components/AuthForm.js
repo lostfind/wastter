@@ -6,6 +6,7 @@ const AuthForm = () => {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
   const toggleAccount = () => setNewAccount((prev) => !prev);
 
   const onChange = (event) => {
@@ -28,14 +29,41 @@ const AuthForm = () => {
           email,
           password
         );
+        window.localStorage.setItem("emailForSignIn", email);
       } else {
         data = await authService.signInWithEmailAndPassword(email, password);
       }
-      console.log(data);
+
       authService.currentUser = data;
     } catch (error) {
       setError(error.message);
     }
+  };
+
+  const signInToken = async (event) => {
+    event.preventDefault();
+    let data;
+    try {
+      await getTokenByEmail();
+
+      data = await authService.signInWithCustomToken(token);
+
+      authService.currentUser = data;
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const getTokenByEmail = async () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email }),
+      // mode: "no-cors",
+    };
+    const response = await fetch("http://localhost:8080/login", requestOptions);
+    const data = await response.json();
+    setToken(data.token);
   };
 
   return (
@@ -66,6 +94,16 @@ const AuthForm = () => {
       <span onClick={toggleAccount}>
         {newAccount ? "Sign In" : "Create Account"}
       </span>
+      <form onSubmit={signInToken}>
+        <input
+          name="email"
+          type="text"
+          required
+          value={email}
+          onChange={onChange}
+        />
+        <input type="submit" value="Sign in with Token" />
+      </form>
     </>
   );
 };
