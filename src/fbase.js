@@ -1,10 +1,10 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
-var firebaseConfig = {
+const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_PROJECT_ID,
@@ -14,9 +14,9 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+export const firebaseInstance = initializeApp(firebaseConfig);
 
-export const firebaseInstance = firebase;
-export const authService = firebase.auth();
-export const dbService = firebase.firestore();
-export const storageService = firebase.storage();
+// export const firebaseInstance = firebase;
+export const authService = getAuth(firebaseInstance);
+export const dbService = getFirestore();
+export const storageService = getStorage();

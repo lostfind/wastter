@@ -1,12 +1,14 @@
 import { authService, dbService } from "fbase";
+import { updateProfile } from "firebase/auth";
+import { query, where, orderBy, collection } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 const Profile = ({ refreshUser, userObj }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const onLogOutClick = () => {
     authService.signOut();
-    history.push("/");
+    navigate("/");
   };
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
   const onChange = (event) => {
@@ -15,7 +17,7 @@ const Profile = ({ refreshUser, userObj }) => {
   const onSubmit = async (event) => {
     event.preventDefault();
     if (userObj.displayName !== newDisplayName) {
-      await userObj.updateProfile({
+      await updateProfile(authService.currentUser, {
         displayName: newDisplayName,
       });
       refreshUser();
@@ -23,11 +25,11 @@ const Profile = ({ refreshUser, userObj }) => {
   };
 
   const getMyWateses = async () => {
-    const wasteses = await dbService
-      .collection("wastes")
-      .where("creatorId", "==", userObj.uid)
-      .orderBy("createdAt")
-      .get();
+    return await query(
+      collection(dbService, "wastes"),
+      where("creatorId", "==", userObj.uid),
+      orderBy("createdAt")
+    );
   };
 
   useEffect(() => {

@@ -1,5 +1,11 @@
 import AuthForm from "components/AuthForm";
-import { authService, firebaseInstance } from "fbase";
+import { authService } from "fbase";
+
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+} from "firebase/auth";
 
 const Auth = () => {
   const onSocialClick = async (event) => {
@@ -8,12 +14,12 @@ const Auth = () => {
     } = event;
     let provider;
     if (name === "google") {
-      provider = new firebaseInstance.auth.GoogleAuthProvider();
+      provider = new GoogleAuthProvider();
     } else if (name === "github") {
-      provider = new firebaseInstance.auth.GithubAuthProvider();
+      provider = new GithubAuthProvider();
     }
 
-    const data = await authService.signInWithPopup(provider);
+    const data = await signInWithPopup(authService, provider);
     console.log(data);
   };
 

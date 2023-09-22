@@ -1,4 +1,6 @@
 import { dbService, storageService } from "fbase";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 import { useState } from "react";
 
 const Wastes = ({ wastesObj, isOwner }) => {
@@ -7,8 +9,8 @@ const Wastes = ({ wastesObj, isOwner }) => {
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure want to delete?");
     if (ok) {
-      await dbService.doc(`wastes/${wastesObj.id}`).delete();
-      await storageService.refFromURL(wastesObj.attachmentUrl).delete();
+      await deleteDoc(doc(dbService, `wastes/${wastesObj.id}`));
+      await deleteObject(ref(storageService, wastesObj.attachmentUrl));
     }
   };
 
@@ -16,7 +18,9 @@ const Wastes = ({ wastesObj, isOwner }) => {
   const onSubmit = async (event) => {
     event.preventDefault();
     console.log(wastesObj, newWastes);
-    await dbService.doc(`wastes/${wastesObj.id}`).update({ text: newWastes });
+    await updateDoc(doc(dbService, `wastes/${wastesObj.id}`), {
+      text: newWastes,
+    });
     setEditing(false);
   };
   const onChange = (event) => {

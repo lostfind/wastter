@@ -1,11 +1,12 @@
 import { authService } from "fbase";
+import { sendEmailVerification } from "firebase/auth";
 import { useState } from "react";
 
 const EmailVerify = () => {
   const [message, setMessage] = useState("");
 
   const onEmailVerifyClick = () => {
-    authService.currentUser.sendEmailVerification().then(function () {
+    sendEmailVerification(authService.currentUser).then(function () {
       setMessage("Email Sent");
     });
   };

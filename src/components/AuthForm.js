@@ -1,4 +1,5 @@
 import { authService } from "fbase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
 const AuthForm = () => {
@@ -25,10 +26,7 @@ const AuthForm = () => {
     try {
       let data;
       if (newAccount) {
-        data = await authService.createUserWithEmailAndPassword(
-          email,
-          password
-        );
+        data = await signInWithEmailAndPassword(authService, email, password);
         window.localStorage.setItem("emailForSignIn", email);
       } else {
         data = await authService.signInWithEmailAndPassword(email, password);

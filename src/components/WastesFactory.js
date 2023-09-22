@@ -1,3 +1,5 @@
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { dbService, storageService } from "fbase";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -26,11 +28,9 @@ const WastesFactory = ({ userObj }) => {
     event.preventDefault();
     let attachmentUrl = "";
     if (attachment !== "") {
-      const attachmentRef = storageService
-        .ref()
-        .child(` ${userObj.uid}/${uuidv4()}`);
-      const response = await attachmentRef.putString(attachment, "data_url");
-      attachmentUrl = await response.ref.getDownloadURL();
+      const attachmentRef = ref(storageService, ` ${userObj.uid}/${uuidv4()}`);
+      await uploadString(attachmentRef, attachment, "data_url");
+      attachmentUrl = await getDownloadURL(attachmentRef);
     }
     const wastesObj = {
       text: waste,
@@ -38,7 +38,7 @@ const WastesFactory = ({ userObj }) => {
       creatorId: userObj.uid,
       attachmentUrl,
     };
-    await dbService.collection("wastes").add(wastesObj);
+    await addDoc(collection(dbService, "wastes"), wastesObj);
     setWaste("");
     setAttachment("");
   };
